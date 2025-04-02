@@ -1,0 +1,6 @@
+@VCCTechTest_HostAddress = http://localhost:5115
+
+GET {{VCCTechTest_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
