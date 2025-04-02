@@ -35,12 +35,12 @@ namespace VCCTechTest.Controllers
 
         // api/products/{id}/apply-discount
         [HttpPost("{id}/ApplyDiscount")]
-        public Product ApplyDiscount(int id, [FromBody] Decimal discountPercentage)
+        public Product ApplyDiscount(int id, [FromBody] decimal discountPercentage)
         {
             Product product = Products.SingleOrDefault(x => x.Id == id)!;
 
-            Decimal oldPrice = product.CurrentPrice;
-            Decimal newPrice = product.CurrentPrice * (1 - (discountPercentage / 100));
+            decimal oldPrice = product.CurrentPrice;
+            decimal newPrice = product.CurrentPrice * (1 - (discountPercentage / 100));
 
             product.CurrentPrice = newPrice;
             product.LastUpdated = DateTime.Now;
@@ -50,7 +50,7 @@ namespace VCCTechTest.Controllers
 
         // api/products/{id}/update-price
         [HttpPut("{id}/UpdatePrice")]
-        public Product UpdatePrice(int id, [FromBody] Decimal newPrice)
+        public Product UpdatePrice(int id, [FromBody] decimal newPrice)
         {
             Product product = Products.SingleOrDefault(x => x.Id == id)!;
 
