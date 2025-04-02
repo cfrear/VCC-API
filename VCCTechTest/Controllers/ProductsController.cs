@@ -4,15 +4,14 @@ using VCCTechTest.Models;
 namespace VCCTechTest.Controllers
 {
     [ApiController]
-    [Route("[controller]")]
+    [Route("api/[controller]")]
     public class ProductsController : ControllerBase
     {
-        private static readonly Product[] Products = new[]
-        {
+        private static readonly Product[] Products =
+        [
             new Product { Id = 1, Name = "Product A", CurrentPrice = 100.0, LastUpdated = DateTime.Parse("2024-09-26T12:34:56") },
-            new Product { Id = 2, Name = "Product B", CurrentPrice = 200.0, LastUpdated = DateTime.Parse("2024-09-26T12:34:56") },
-            new Product { Id = 2, Name = "Product C", CurrentPrice = 25.50, LastUpdated = DateTime.Parse("2024-09-26T12:34:56") }
-        };
+            new Product { Id = 2, Name = "Product B", CurrentPrice = 200.0, LastUpdated = DateTime.Parse("2024-09-26T12:34:56") }
+        ];
 
         private readonly ILogger<ProductsController> _logger;
 
@@ -21,18 +20,38 @@ namespace VCCTechTest.Controllers
             _logger = logger;
         }
 
-        [HttpGet(Name = "GetProducts")]
+        // api/products/
+        [HttpGet("GetProducts")]
         public IEnumerable<Product> GetProducts()
         {
+
             return Products;
 
-            //return Enumerable.Range(1, 5).Select(index => new Product
+            //return Enumerable.Range(0, Products.Count()).Select(index => new Product
             //{
-            //    Date = DateOnly.FromDateTime(DateTime.Now.AddDays(index)),
-            //    TemperatureC = Random.Shared.Next(-20, 55),
-            //    Summary = Summaries[Random.Shared.Next(Summaries.Length)]
+            //    Id = Products[index].Id,
+            //    Name = Products[index].Name,
+            //    CurrentPrice = Products[index].CurrentPrice,
+            //    LastUpdated = Products[index].LastUpdated
             //})
             //.ToArray();
+        }
+
+        // api/products/{id}
+        [HttpGet("GetProduct/{id:int}")]
+        public Product GetProduct(int id)
+        {
+            return Products.SingleOrDefault(x => x.Id == id)!;
+        }
+
+        // api/products/{id}/apply-discount
+        [HttpPost("{id}/ApplyDiscount")]
+        public ActionResult<Product> ApplyDiscount(int id, [FromBody] double discountPercentage)
+        {
+            Product product = Products.SingleOrDefault(x => x.Id == id)!;
+            Double newPrice = product.CurrentPrice * (discountPercentage / 100);
+
+            return CreatedAtAction(nameof(product), product, new { discountedPrice = newPrice.ToString() });
         }
     }
 }
