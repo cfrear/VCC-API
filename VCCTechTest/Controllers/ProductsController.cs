@@ -24,17 +24,7 @@ namespace VCCTechTest.Controllers
         [HttpGet("GetProducts")]
         public IEnumerable<Product> GetProducts()
         {
-
             return Products;
-
-            //return Enumerable.Range(0, Products.Count()).Select(index => new Product
-            //{
-            //    Id = Products[index].Id,
-            //    Name = Products[index].Name,
-            //    CurrentPrice = Products[index].CurrentPrice,
-            //    LastUpdated = Products[index].LastUpdated
-            //})
-            //.ToArray();
         }
 
         // api/products/{id}
@@ -42,24 +32,29 @@ namespace VCCTechTest.Controllers
         public Product GetProduct(int id)
         {
             return Products.SingleOrDefault(x => x.Id == id)!;
+
+            //price history
         }
 
         // api/products/{id}/apply-discount
         [HttpPost("{id}/ApplyDiscount")]
-        public ActionResult<Product> ApplyDiscount(int id, [FromBody] double discountPercentage)
+        public Product ApplyDiscount(int id, [FromBody] double discountPercentage)
         {
             Product product = Products.SingleOrDefault(x => x.Id == id)!;
+
             Double oldPrice = product.CurrentPrice;
-            Double newPrice = product.CurrentPrice * (discountPercentage / 100);
+            Double newPrice = product.CurrentPrice * (1 - (discountPercentage / 100));
 
             product.CurrentPrice = newPrice;
+            product.LastUpdated = DateTime.Now;
 
-            return CreatedAtAction(nameof(product), product, new { discountedPrice = newPrice.ToString() });
+            return Products.SingleOrDefault(x => x.Id == id)!;
+            //return CreatedAtAction(nameof(product), product, new { discountedPrice = newPrice.ToString() });
         }
 
         // api/products/{id}/update-price
         [HttpPut("{id}/UpdatePrice")]
-        public ActionResult<Product> UpdatePrice(int id, [FromBody] double newPrice)
+        public Product UpdatePrice(int id, [FromBody] double newPrice)
         {
             Product product = Products.SingleOrDefault(x => x.Id == id)!;
 
