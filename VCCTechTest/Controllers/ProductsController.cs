@@ -13,11 +13,8 @@ namespace VCCTechTest.Controllers
             new Product { Id = 2, Name = "Product B", CurrentPrice = 200.0M, LastUpdated = DateTime.Parse("2024-09-26T12:34:56") }
         ];
 
-        private readonly ILogger<ProductsController> _logger;
-        
-        public ProductsController(ILogger<ProductsController> logger)
+        public ProductsController()
         {
-            _logger = logger;
         }
 
         // api/products/
