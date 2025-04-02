@@ -49,9 +49,24 @@ namespace VCCTechTest.Controllers
         public ActionResult<Product> ApplyDiscount(int id, [FromBody] double discountPercentage)
         {
             Product product = Products.SingleOrDefault(x => x.Id == id)!;
+            Double oldPrice = product.CurrentPrice;
             Double newPrice = product.CurrentPrice * (discountPercentage / 100);
 
+            product.CurrentPrice = newPrice;
+
             return CreatedAtAction(nameof(product), product, new { discountedPrice = newPrice.ToString() });
+        }
+
+        // api/products/{id}/update-price
+        [HttpPut("{id}/UpdatePrice")]
+        public ActionResult<Product> UpdatePrice(int id, [FromBody] double newPrice)
+        {
+            Product product = Products.SingleOrDefault(x => x.Id == id)!;
+
+            product.CurrentPrice = newPrice;
+            product.LastUpdated = DateTime.UtcNow;
+
+            return Products.SingleOrDefault(x => x.Id == id)!;
         }
     }
 }
