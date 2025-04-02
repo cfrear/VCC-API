@@ -9,12 +9,12 @@ namespace VCCTechTest.Controllers
     {
         private static readonly Product[] Products =
         [
-            new Product { Id = 1, Name = "Product A", CurrentPrice = 100.0, LastUpdated = DateTime.Parse("2024-09-26T12:34:56") },
-            new Product { Id = 2, Name = "Product B", CurrentPrice = 200.0, LastUpdated = DateTime.Parse("2024-09-26T12:34:56") }
+            new Product { Id = 1, Name = "Product A", CurrentPrice = 100.0M, LastUpdated = DateTime.Parse("2024-09-26T12:34:56") },
+            new Product { Id = 2, Name = "Product B", CurrentPrice = 200.0M, LastUpdated = DateTime.Parse("2024-09-26T12:34:56") }
         ];
 
         private readonly ILogger<ProductsController> _logger;
-
+        
         public ProductsController(ILogger<ProductsController> logger)
         {
             _logger = logger;
@@ -38,12 +38,12 @@ namespace VCCTechTest.Controllers
 
         // api/products/{id}/apply-discount
         [HttpPost("{id}/ApplyDiscount")]
-        public Product ApplyDiscount(int id, [FromBody] double discountPercentage)
+        public Product ApplyDiscount(int id, [FromBody] Decimal discountPercentage)
         {
             Product product = Products.SingleOrDefault(x => x.Id == id)!;
 
-            Double oldPrice = product.CurrentPrice;
-            Double newPrice = product.CurrentPrice * (1 - (discountPercentage / 100));
+            Decimal oldPrice = product.CurrentPrice;
+            Decimal newPrice = product.CurrentPrice * (1 - (discountPercentage / 100));
 
             product.CurrentPrice = newPrice;
             product.LastUpdated = DateTime.Now;
@@ -54,7 +54,7 @@ namespace VCCTechTest.Controllers
 
         // api/products/{id}/update-price
         [HttpPut("{id}/UpdatePrice")]
-        public Product UpdatePrice(int id, [FromBody] double newPrice)
+        public Product UpdatePrice(int id, [FromBody] Decimal newPrice)
         {
             Product product = Products.SingleOrDefault(x => x.Id == id)!;
 
