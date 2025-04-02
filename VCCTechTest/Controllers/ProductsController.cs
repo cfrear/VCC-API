@@ -46,7 +46,6 @@ namespace VCCTechTest.Controllers
             product.LastUpdated = DateTime.Now;
 
             return Products.SingleOrDefault(x => x.Id == id)!;
-            //return CreatedAtAction(nameof(product), product, new { discountedPrice = newPrice.ToString() });
         }
 
         // api/products/{id}/update-price
